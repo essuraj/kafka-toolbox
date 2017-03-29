@@ -1,12 +1,13 @@
 <template>
     <div>
-        <md-toolbar class="md-dense">
+    <div >
+        
+        <md-toolbar class="md-dense" >
             <!--<md-button class="md-icon-button">
                                                 <md-icon>menu</md-icon>
                                             </md-button>-->
     
-            <h2 class="md-title"
-                style="flex: 1">kafka-toolbox</h2>
+            <h2 class="md-title" style="-webkit-app-region: drag;flex: 1">kafka-toolbox</h2>
     
             <md-button class="md-icon-button"
                        @click.native="minimize">
@@ -21,6 +22,7 @@
                 <md-icon>close</md-icon>
             </md-button>
         </md-toolbar>
+    </div>
         <md-toolbar class="md-dense">   
             <md-button class="md-icon-button"
                        @click.native="openDialog('connect')">
