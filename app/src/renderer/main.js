@@ -13,6 +13,12 @@ Vue.use(Electron)
 Vue.use(Resource)
 Vue.use(Router)
 Vue.use(VueMaterial)
+Vue.material.registerTheme('default', {
+  primary: 'blue',
+  accent: 'red',
+  warn: 'deep-orange',
+  background: 'white'
+})
 Vue.config.debug = true
 
 const router = new Router({

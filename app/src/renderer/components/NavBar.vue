@@ -1,19 +1,39 @@
 <template>
     <div>
-        <md-toolbar class="md-transparent md-dense">
-            <md-button class="md-icon-button">
-                <md-icon>menu</md-icon>
-            </md-button>
+        <md-toolbar class="md-dense">
+            <!--<md-button class="md-icon-button">
+                                                <md-icon>menu</md-icon>
+                                            </md-button>-->
     
             <h2 class="md-title"
                 style="flex: 1">kafka-toolbox</h2>
     
             <md-button class="md-icon-button"
+                       @click.native="minimize">
+                <md-icon>expand_more</md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
+                       @click.native="maximize">
+                <md-icon>crop_free</md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
+                       @click.native="openDialog('close')">
+                <md-icon>close</md-icon>
+            </md-button>
+        </md-toolbar>
+        <md-toolbar class="md-dense">   
+            <md-button class="md-icon-button"
                        @click.native="openDialog('connect')">
                 <md-icon>developer_board</md-icon>
             </md-button>
         </md-toolbar>
-    
+        <md-dialog-confirm :md-title="confirm.title"
+                           :md-ok-text="confirm.ok"
+                           :md-cancel-text="confirm.cancel"
+                           @open="onOpen"
+                           @close="onClose"
+                           ref="close">
+        </md-dialog-confirm>
         <md-dialog ref="connect">
             <md-dialog-title>Create new note</md-dialog-title>
     
@@ -42,11 +62,16 @@
 </template>
 <script>
 import {
-    ipcRenderer
+    ipcRenderer, remote
 } from 'electron'
 export default {
     data() {
         return {
+            confirm: {
+                title: 'Are you sure you want to exit ?',
+                ok: 'Exit',
+                cancel: 'Cancel'
+            },
             isConnected: undefined,
             connections: "",
             status: undefined,
@@ -56,11 +81,28 @@ export default {
 
     },
     methods: {
+        minimize() {
+            remote.getCurrentWindow().minimize()
+        },
+        maximize() {
+            var window = remote.getCurrentWindow();
+            if (!window.isMaximized()) {
+                window.maximize();
+            } else {
+                window.unmaximize();
+            }
+        },
         openDialog(ref) {
             this.$refs[ref].open();
         },
         closeDialog(ref) {
             this.$refs[ref].close();
+        }, onOpen() {
+            console.log('Opened');
+        },
+        onClose(type) {
+            if (type === "ok")
+                remote.getCurrentWindow().close();
         },
         test() {
             let op = ipcRenderer.sendSync('test', this.url);
